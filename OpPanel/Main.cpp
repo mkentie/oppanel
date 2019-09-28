@@ -62,12 +62,9 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-
-
-
     DWORD dwWritten = 0;
     WriteFile(h.Get(), "\rblabla12", 9, &dwWritten, nullptr);
-    
+
     return EXIT_SUCCESS;
 
 }
