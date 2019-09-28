@@ -79,7 +79,7 @@ namespace
             {
             case EInfoType::SPEED:
                 {
-                    snprintf(buf, _countof(buf), "%4.fMHz", Data.fCPUSpeed);
+                    snprintf(buf, _countof(buf), "%4.f MHz", Data.fCPUSpeed);
                 }
                 break;
             case EInfoType::LOAD:
