@@ -1,9 +1,4 @@
-#include <windows.h>
-#include <cfgmgr32.h>
-#include <memory>
-#include <initguid.h>
-#include <Devpkey.h>
-#include <string>
+#include "StdAfx.h"
 #include "FindComPort.h"
 
 std::pair<bool, std::wstring> FindComPortPath(const wchar_t* const pszDeviceId)

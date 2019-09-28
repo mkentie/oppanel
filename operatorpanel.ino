@@ -65,6 +65,8 @@ void setup() {
   
   Display::Reset();
   HddLed();
+  Display::SendString("started");
+  delay(1000);
 }
 
 void loop() 
@@ -78,19 +80,8 @@ void loop()
   while (Serial.available())
   {
     const char c = Serial.read();
-    if (c == '\r')
-    {
-      iDigit = 0;
-    }
-    else if (c=='\n')
-    {
-      Display::SendString("");
-    }
-    else
-    {
-      Display::SendChar(c, iDigit);
-      iDigit = (iDigit+1) % DisplaySize;
-    }
+    Display::SendChar(c, iDigit);
+    iDigit = (iDigit+1) % DisplaySize;
     
     bReceived = true;
   }
@@ -105,6 +96,7 @@ void loop()
   
   if (bDemoMode)
   {
+    iDigit = 0; //Next time we receive data start from first digit
     char szDemo[DisplaySize+1];
     const int iSeg = ((TimeSinceRecv-TimeOutTime) / 500) % DisplaySize;
     for (int i = 0; i < DisplaySize; i++)
