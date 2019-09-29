@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "FindComPort.h"
-#include "CpuUsage.h"
 #include "CoreTempPlugin.h"
 
 
@@ -68,7 +67,7 @@ namespace
 
         }
 
-        void Update(const CoreTempSharedData& Data)
+        bool Update(const CoreTempSharedData& Data)
         {
             m_iInfoType = static_cast<EInfoType>((static_cast<int>(m_iInfoType) + 1) % static_cast<int>(EInfoType::TYPES_COUNT));
 
@@ -89,10 +88,17 @@ namespace
                     snprintf(buf, _countof(buf), "%3d%%%3.f\x01b", iLoad, fTemp);
                 }
                 break;
+            default:
+                return false;
             }
 
             DWORD dwWritten;
-            WriteFile(m_ComPortHandle.Get(), buf, iDisplayChars, &dwWritten, nullptr);
+            if (WriteFile(m_ComPortHandle.Get(), buf, iDisplayChars, &dwWritten, nullptr) == 0)
+            {
+                return false;
+            }
+
+            return true;
         }
 
     private:
@@ -129,19 +135,29 @@ namespace CoreTempPluginFuncs
         return 0; //0 = success
     }
 
+    void Stop()
+    {
+        s_ThePluginPtr.reset();
+    }
+
     void Update(const LPCoreTempSharedData data)
     {
-        if (!s_ThePluginPtr || !data)
+        if (!data)
         {
             return;
         }
 
-        s_ThePluginPtr->Update(*data);
-    }
-
-    void Stop()
-    {
-        s_ThePluginPtr.reset();
+        if(s_ThePluginPtr)
+        {
+            if (!s_ThePluginPtr->Update(*data))
+            {
+                Stop();
+            }
+        }
+        else
+        {
+            Start();
+        }
     }
 
     int Configure()

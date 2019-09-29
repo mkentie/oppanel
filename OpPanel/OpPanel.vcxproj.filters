@@ -21,18 +21,12 @@
     <ClCompile Include="FindComPort.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CpuUsage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="StdAfx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FindComPort.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CpuUsage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StdAfx.h">

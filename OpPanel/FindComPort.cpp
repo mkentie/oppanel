@@ -42,22 +42,26 @@ std::pair<bool, std::wstring> FindComPortPath(const wchar_t* const pszDeviceId)
             return std::make_pair(false, std::wstring()); 
         }
 
-        //Get 'matching device id' e.g. "usb\vid_2341&pid_0043"
+        //Get hardware id e.g. "usb\vid_2341&pid_0043"
         ulPropSize = 0;
-        if (CM_Get_DevNode_Property(DevInst, &DEVPKEY_Device_MatchingDeviceId, &PropType, nullptr, &ulPropSize, 0) != CR_BUFFER_SMALL)
+        if (CM_Get_DevNode_Property(DevInst, &DEVPKEY_Device_HardwareIds, &PropType, nullptr, &ulPropSize, 0) != CR_BUFFER_SMALL)
         {
             return std::make_pair(false, std::wstring()); 
         }
 
-        std::unique_ptr<BYTE[]> BufMatchingDeviceId(new BYTE[ulPropSize]);
-        if (CM_Get_DevNode_Property(DevInst, &DEVPKEY_Device_MatchingDeviceId, &PropType, BufMatchingDeviceId.get(), &ulPropSize, 0) != CR_SUCCESS)
+        std::unique_ptr<BYTE[]> BufHardwareIds(new BYTE[ulPropSize]);
+        if (CM_Get_DevNode_Property(DevInst, &DEVPKEY_Device_HardwareIds, &PropType, BufHardwareIds.get(), &ulPropSize, 0) != CR_SUCCESS)
         {
             return std::make_pair(false, std::wstring()); 
         }
 
-        if (wcscmp(reinterpret_cast<wchar_t*>(BufMatchingDeviceId.get()), pszDeviceId) == 0)
+        //Walk through array-of-null-terminated-strings of ids
+        for (wchar_t* pszCurrentId = reinterpret_cast<wchar_t*>(BufHardwareIds.get()); *pszCurrentId; pszCurrentId += wcslen(pszCurrentId) + 1)
         {
-            return std::make_pair(true, pszCurrentInterface);
+            if (_wcsicmp(pszCurrentId, pszDeviceId) == 0)
+            {
+                return std::make_pair(true, pszCurrentInterface);
+            }
         }
     }
 
