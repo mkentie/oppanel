@@ -2,7 +2,8 @@ Interface IBM PS/2 Model 9595 operator panel over USB by means of an Arduino. Me
 
 [My IBM PS/2 Model 9595 case to ATX conversion project).](https://kentie.net/article/ps2atx2020)
 
-![Schematic.png]
+![schematic](Schematic.png)
+
 
 Oppanel pins - (?) means I don't know what it's for:
 
@@ -26,4 +27,4 @@ Pin | Description                         | Pin | Description
 16  | Ground                              | 33  | Speaker
 17  | (?)Address 0                        | 34  | Speaker ground
 
-(OpPanel\FindComPort.cpp) Contains code to open an USB (i.e. Arduino) COM port by device ID. This might be useful for other projects as well. The trick here is that the device is directly opened as a COM port, so there's no (dubious) code that tries to walk COM ports and match them to an Arduino by name or anything like that.
+[FindComPort.cpp](OpPanel/FindComPort.cpp) Contains code to open an USB (i.e. Arduino) COM port by device ID. This might be useful for other projects as well. The trick here is that the device is directly opened as a COM port, so there's no (dubious) code that tries to walk COM ports and match them to an Arduino by name or anything like that.
